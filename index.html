@@ -1,28 +1,37 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Essencialismo - Leitura Imersiva</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              paper: '#fdfbf7',
+              ink: '#1a1a1a',
+            },
+            fontFamily: {
+              display: ['Playfair Display', 'serif'],
+              sans: ['Inter', 'sans-serif'],
+              'serif-book': ['Merriweather', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
       body {
-        background-color: #101010;
-        color: #e5e5e5;
-        font-family: 'Inter', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        /* Default styles handled by React classes */
       }
-      .font-serif-book {
-        font-family: 'Merriweather', serif;
-      }
-      .font-display {
-        font-family: 'Playfair Display', serif;
-      }
+      
       /* Hyphenation for justified text */
       .hyphens-auto {
         -webkit-hyphens: auto;
@@ -30,7 +39,7 @@
         hyphens: auto;
       }
       
-      /* Custom Scrollbar for Netflix feel - Minimal & Dark */
+      /* Custom Scrollbar for Netflix feel - Minimal & Dark/Light aware */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -38,12 +47,23 @@
       ::-webkit-scrollbar-track {
         background: transparent;
       }
-      ::-webkit-scrollbar-thumb {
+      
+      /* Dark Mode Scrollbar */
+      .dark ::-webkit-scrollbar-thumb {
         background: #333;
         border-radius: 3px;
       }
-      ::-webkit-scrollbar-thumb:hover {
+      .dark ::-webkit-scrollbar-thumb:hover {
         background: #555;
+      }
+
+      /* Light Mode Scrollbar */
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #999;
       }
     </style>
   <script type="importmap">

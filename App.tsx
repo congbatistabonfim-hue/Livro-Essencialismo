@@ -6,8 +6,9 @@ import { Journey } from './components/Journey';
 import { bookPages } from './services/bookContent';
 import { getProgress } from './services/storageService';
 import { ViewState, ReadingProgress } from './types';
+import { ThemeProvider } from './contexts/ThemeContext';
 
-function App() {
+function AppContent() {
   const [view, setView] = useState<ViewState>(ViewState.HOME);
   const [progress, setProgress] = useState<ReadingProgress | null>(null);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -37,7 +38,7 @@ function App() {
   };
 
   return (
-    <div className="antialiased">
+    <div className="antialiased bg-paper dark:bg-[#101010] min-h-screen transition-colors duration-300">
       {view === ViewState.HOME && (
         <Home 
           onStartReading={handleStartReading} 
@@ -61,6 +62,14 @@ function App() {
         />
       )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
