@@ -18,7 +18,18 @@ export interface Bookmark {
   createdAt: number;
 }
 
+export interface ArtifactCard {
+  id: string;
+  title: string;
+  description: string;
+  archetype: 'Weapon' | 'Amulet' | 'Tool' | 'Relic';
+  chapterTriggerId: number; // The page ID that unlocks this card
+  iconPath: string;
+  rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary';
+}
+
 export enum ViewState {
   HOME = 'HOME',
-  READER = 'READER'
+  READER = 'READER',
+  JOURNEY = 'JOURNEY'
 }

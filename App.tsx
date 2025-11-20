@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Home } from './components/Home';
 import { Reader } from './components/Reader';
+import { Journey } from './components/Journey';
 import { bookPages } from './services/bookContent';
 import { getProgress } from './services/storageService';
 import { ViewState, ReadingProgress } from './types';
@@ -25,14 +27,13 @@ function App() {
   };
 
   const handleChapterSelect = (pageIndex: number) => {
-    // Find the actual index in the array based on page ID logic, 
-    // but here bookPages is array, so index is array index.
-    // If we pass the raw ID from the bookPages array, we need to find its index.
-    // The Home component passes (id - 1), which matches array index if ids are sequential starting at 1.
-    // For safety:
     const index = bookPages.findIndex(p => p.id === pageIndex + 1);
     setCurrentPageIndex(index >= 0 ? index : 0);
     setView(ViewState.READER);
+  };
+
+  const handleOpenJourney = () => {
+    setView(ViewState.JOURNEY);
   };
 
   return (
@@ -42,6 +43,7 @@ function App() {
           onStartReading={handleStartReading} 
           progress={progress}
           onSelectChapter={(idx) => handleChapterSelect(idx)}
+          onOpenJourney={handleOpenJourney}
         />
       )}
       
@@ -50,6 +52,12 @@ function App() {
           pages={bookPages}
           initialPageIndex={currentPageIndex}
           onClose={() => setView(ViewState.HOME)}
+        />
+      )}
+
+      {view === ViewState.JOURNEY && (
+        <Journey 
+          onBack={() => setView(ViewState.HOME)}
         />
       )}
     </div>
