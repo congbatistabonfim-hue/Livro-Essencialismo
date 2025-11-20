@@ -232,19 +232,46 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
 
       if (isChapterTitle) {
         return (
-          <div key={idx} className="mt-20 mb-12 text-center animate-fade-in-up">
-            <span className="text-red-600 text-xs font-bold tracking-[0.3em] uppercase mb-4 block">Nova Seção</span>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-white tracking-tight leading-tight">
-              {trimmed}
-            </h2>
-            <div className="w-16 h-1 bg-red-600 mx-auto mt-8 rounded-full"></div>
+          <div key={idx} className="mt-24 mb-16 text-center animate-fade-in-up">
+            <span className="text-red-500/80 text-xs font-bold tracking-[0.4em] uppercase mb-6 block">Nova Seção</span>
+            
+            <div className="flex items-center justify-center gap-4 md:gap-6 group">
+                <h2 className="text-5xl md:text-6xl font-display font-bold text-amber-500 italic tracking-tight leading-none drop-shadow-md">
+                  {trimmed}
+                </h2>
+                
+                {/* Integrated Audio Play Button */}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleReading();
+                    }}
+                    className={`
+                        w-12 h-12 flex items-center justify-center rounded-full border-2 
+                        transition-all duration-300 shadow-lg
+                        ${isReading && !isPaused 
+                            ? 'bg-amber-500 border-amber-500 text-black animate-pulse' 
+                            : 'border-amber-500/30 text-amber-500 hover:bg-amber-500/10 hover:border-amber-500'
+                        }
+                    `}
+                    title={isReading && !isPaused ? "Pausar leitura" : "Ouvir capítulo"}
+                >
+                    {isReading && !isPaused ? (
+                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
+                    ) : (
+                         <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                    )}
+                </button>
+            </div>
+
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-600/60 to-transparent mx-auto mt-10 rounded-full"></div>
           </div>
         );
       }
 
       if (isSubtitle) {
         return (
-          <h3 key={idx} className="text-xl font-sans font-semibold text-red-100/90 mt-12 mb-6 tracking-wide uppercase border-l-2 border-red-600 pl-4">
+          <h3 key={idx} className="text-xl md:text-2xl font-display italic font-semibold text-red-100/90 mt-16 mb-8 tracking-wide border-l-4 border-red-600 pl-6 py-1">
             {trimmed}
           </h3>
         );
@@ -252,7 +279,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
 
       if (isBlockQuote) {
         return (
-          <blockquote key={idx} className="my-10 pl-6 md:pl-8 border-l-4 border-red-800/50 italic text-gray-400 font-serif-book text-lg leading-relaxed">
+          <blockquote key={idx} className="my-12 pl-6 md:pl-10 border-l-2 border-amber-500/50 italic text-amber-100/80 font-serif-book text-lg md:text-xl leading-relaxed bg-white/5 p-6 rounded-r-lg">
             "{trimmed.replace(/^“|”$/g, '')}"
           </blockquote>
         );
@@ -261,8 +288,8 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
       if (isDialogue) {
         const cleanDialogue = trimmed.replace(/^[—-] /, '');
         return (
-            <div key={idx} className="mb-5 pl-4 md:pl-8 relative group">
-               <span className="absolute left-0 top-0 text-gray-500 font-serif-book">—</span>
+            <div key={idx} className="mb-6 pl-4 md:pl-8 relative group">
+               <span className="absolute left-0 top-0 text-red-500 font-serif-book text-xl">—</span>
                <p className="text-justify text-gray-300 leading-loose font-serif-book hyphens-auto">
                  {cleanDialogue}
                </p>
@@ -276,7 +303,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
          const content = trimmed.replace(/^\d+\.|^[\-•]/, '').trim();
          return (
              <div key={idx} className="mb-4 pl-6 md:pl-12 relative flex items-baseline">
-                 <span className="absolute left-0 md:left-4 text-red-500 font-bold font-mono text-sm">
+                 <span className="absolute left-0 md:left-4 text-amber-500 font-bold font-mono text-sm">
                     {marker}
                  </span>
                  <p className="text-justify text-gray-300 leading-loose font-serif-book hyphens-auto">
@@ -295,7 +322,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
   };
 
   return (
-    <div className="fixed inset-0 bg-[#101010] flex flex-col z-50 text-gray-300 font-sans selection:bg-red-900/50 selection:text-white">
+    <div className="fixed inset-0 bg-[#101010] flex flex-col z-50 text-gray-300 font-sans selection:bg-amber-900/40 selection:text-amber-100">
       
       {/* Header Controls */}
       <div className={`absolute top-0 left-0 right-0 transition-transform duration-300 z-30 ${showControls ? 'translate-y-0' : '-translate-y-full'}`}>
@@ -332,7 +359,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
                 <div className="flex items-center gap-1 bg-black/40 backdrop-blur-md px-1 py-1 rounded-full border border-white/10 shadow-lg mr-2">
                    <button
                       onClick={toggleReading}
-                      className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${isReading && !isPaused ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
+                      className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${isReading && !isPaused ? 'bg-amber-500 text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
                       title={isReading && !isPaused ? "Pausar Leitura" : "Ler em Voz Alta"}
                    >
                       {isReading && !isPaused ? (
@@ -353,7 +380,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
                 {/* Bookmark Toggle */}
                 <button
                    onClick={toggleBookmark}
-                   className={`p-2 rounded-full transition-all ${isBookmarked ? 'text-red-500 bg-red-500/10' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
+                   className={`p-2 rounded-full transition-all ${isBookmarked ? 'text-amber-500 bg-amber-500/10' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
                    title={isBookmarked ? "Remover marcador" : "Adicionar marcador"}
                 >
                     <svg className="w-5 h-5" fill={isBookmarked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
@@ -367,7 +394,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
                 >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                     {bookmarks.length > 0 && (
-                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span className="absolute top-1 right-1 w-2 h-2 bg-amber-500 rounded-full"></span>
                     )}
                 </button>
 
@@ -418,7 +445,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
                 disabled={currentIndex === 0}
                 className={`group px-6 py-5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-300 flex flex-col items-start gap-2 ${currentIndex === 0 ? 'opacity-0 pointer-events-none' : 'bg-zinc-900/50 text-gray-400 hover:bg-zinc-800 hover:text-white'}`}
              >
-               <span className="text-zinc-600 text-[10px] group-hover:text-red-500 transition-colors">Anterior</span>
+               <span className="text-zinc-600 text-[10px] group-hover:text-amber-500 transition-colors">Anterior</span>
                <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 Página {currentIndex}
@@ -454,7 +481,7 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
              <span className="w-10 text-right">{Math.round(progressPercentage)}%</span>
              <div className="relative flex-1 h-1 bg-zinc-800 rounded-full group cursor-pointer">
                 <div 
-                  className="absolute top-0 left-0 h-full bg-red-600 rounded-full transition-all duration-300"
+                  className="absolute top-0 left-0 h-full bg-amber-600 rounded-full transition-all duration-300"
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
              </div>
@@ -480,9 +507,9 @@ export const Reader: React.FC<ReaderProps> = ({ pages, initialPageIndex, onClose
                      </div>
                  ) : (
                      bookmarks.map((b, i) => (
-                         <div key={i} onClick={() => handleJumpToBookmark(b.pageId)} className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 hover:border-red-900/50 cursor-pointer group transition-all hover:bg-zinc-800">
+                         <div key={i} onClick={() => handleJumpToBookmark(b.pageId)} className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 hover:border-amber-900/50 cursor-pointer group transition-all hover:bg-zinc-800">
                              <div className="flex justify-between items-start mb-2">
-                                 <span className="text-xs font-bold text-red-500 uppercase tracking-wider">Página {b.pageId}</span>
+                                 <span className="text-xs font-bold text-amber-500 uppercase tracking-wider">Página {b.pageId}</span>
                                  <span className="text-[10px] text-gray-600">{new Date(b.createdAt).toLocaleDateString()}</span>
                              </div>
                              <h4 className="text-white text-sm font-medium mb-1 line-clamp-1">{b.chapterTitle}</h4>
